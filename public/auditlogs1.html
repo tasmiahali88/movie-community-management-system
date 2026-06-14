@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Audit Logs - MOVstrem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-accent: #fa4a4a;
+      --primary-dark: #18171c;
+      --card-dark: #23222b;
+      --section-black: #18181c;
+      --table-head: #23222b;
+      --table-row: #18181c;
+    }
+    body {
+      background: var(--primary-dark);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* NAVBAR (unified) */
+    nav {
+      background: #111017;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo { font-size: 1.7rem; font-weight: 700; letter-spacing: 2px; color: #fff; }
+    .logo .red { color: var(--main-accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+    nav ul li a:hover { color: var(--main-accent); }
+    .profile-actions { display: flex; align-items: center; }
+
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .card { background: var(--card-dark); padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); }
+    h2 { border-bottom: 2px solid var(--main-accent); padding-bottom: 10px; display: inline-block; margin-top: 0; }
+
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { text-align: left; padding: 15px; border-bottom: 1px solid #333; }
+    th { color: #aaa; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; background: var(--table-head); }
+    td { font-size: 0.9rem; background: var(--table-row); }
+    tr:hover td { background: #202026; }
+
+    .action-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; text-transform: uppercase; font-weight: bold; }
+    .badge-INSERT { background: rgba(46, 204, 113, 0.2); color: #2ecc71; }
+    .badge-UPDATE { background: rgba(52, 152, 219, 0.2); color: #3498db; }
+    .badge-DELETE { background: rgba(231, 76, 60, 0.2); color: #e74c3c; }
+    .badge-MODERATE { background: rgba(241, 196, 15, 0.2); color: #f1c40f; }
+
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="users1.html">Users</a></li>
+        <li><a href="events1.html">Events</a></li>
+        <li><a href="movies1.html">Movies</a></li>
+        <li><a href="post1.html">Posts</a></li>
+        <li><a href="genres1.html">Genres</a></li>
+        <li><a href="restrictedwords1.html">Restricted</a></li>
+        <li><a href="auditlogs1.html">Audit</a></li>
+      </ul>
+      <div class="profile-actions"></div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <div class="card">
+        <h2>System Audit Logs</h2>
+        <div class="section-title" style="color:#888; margin-bottom:15px;">Track administrative actions and system changes.</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Admin</th>
+              <th>Action</th>
+              <th>Target</th>
+              <th>Details</th>
+              <th>Timestamp</th>
+            </tr>
+          </thead>
+          <tbody id="auditLogBody">
+            <tr><td colspan="5" style="text-align:center; padding:20px;">Loading logs...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    window.onload = function() {
+        checkAuthAndUI();
+        loadAuditLogs(); // New function call
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>MOVstrem – Movies</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-main: #18171c;
+      --card-bg: #23222b;
+      --accent: #fa4a4a;
+      --text-main: #ffffff;
+      --text-muted: #b2b2b2;
+    }
+    body {
+      background: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Montserrat', sans-serif;
+      margin: 0;
+      min-height: 100vh;
+    }
+    nav {
+      background: #111017;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+    .logo .red {
+      color: var(--accent);
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav ul li a:hover {
+      color: var(--accent);
+    }
+    .profile-actions button {
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 30px;
+      transition: 0.2s;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h2 { border-left: 4px solid var(--accent); padding-left: 15px; margin-bottom: 30px; }
+
+    /* Movie Grid */
+    .movie-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+    .movie-card {
+      background: var(--card-bg);
+      border-radius: 12px;
+      width: 200px;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      transition: transform 0.2s;
+      cursor: pointer; 
+    }
+    .movie-card:hover { transform: translateY(-5px); }
+    .movie-card img {
+      width: 100%;
+      height: 280px;
+      object-fit: cover;
+    }
+    .movie-info { padding: 15px; }
+    .tag { display: block; font-weight: bold; font-size: 1rem; margin-bottom: 5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .genre { color: var(--accent); font-size: 0.85rem; margin-right: 10px; }
+    .year { color: var(--text-muted); font-size: 0.85rem; }
+    .rating { font-size: 0.85rem; float: right; color: #ffc107; }
+
+    /* User Detail Modal Styles */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.85);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 2000;
+      backdrop-filter: blur(8px);
+    }
+    .detail-modal {
+      background: #2b2d35;
+      width: 900px;
+      max-width: 95vw;
+      border-radius: 16px;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+      display: flex;
+      overflow: hidden;
+      border: 1px solid #444;
+      max-height: 90vh;
+    }
+    .detail-poster {
+      width: 35%;
+      object-fit: cover;
+    }
+    .detail-content {
+      padding: 30px;
+      width: 65%;
+      display: flex;
+      flex-direction: column;
+      overflow-y: auto;
+    }
+    .detail-header {
+      border-bottom: 1px solid #444;
+      padding-bottom: 20px;
+      margin-bottom: 20px;
+    }
+    .detail-title {
+      margin: 0;
+      font-size: 2.2rem;
+      line-height: 1.1;
+    }
+    .detail-meta {
+      margin-top: 10px;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      display: flex;
+      gap: 15px;
+      align-items: center;
+    }
+    .meta-badge {
+      background: rgba(250, 74, 74, 0.15);
+      color: var(--accent);
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-weight: 600;
+      font-size: 0.8rem;
+    }
+    .detail-synopsis {
+      line-height: 1.6;
+      color: #ddd;
+      font-size: 1rem;
+      margin-bottom: 20px;
+    }
+    .close-modal-btn {
+      background: transparent;
+      border: 1px solid #666;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 30px;
+      cursor: pointer;
+      align-self: flex-start;
+      margin-top: 20px;
+      transition: 0.2s;
+    }
+    .close-modal-btn:hover { background: #fff; color: #000; }
+
+    /* Review & Forum Styles */
+    .section-header {
+        margin: 25px 0 15px 0; color: #ddd; font-size: 1.1rem; border-bottom: 1px solid #444; padding-bottom: 5px;
+    }
+    .reviews-section, .forum-section {
+        background: #202125;
+        padding: 15px;
+        border-radius: 8px;
+        margin-top: 10px;
+    }
+    .review-item, .forum-post {
+        border-bottom: 1px solid #333;
+        padding-bottom: 10px;
+        margin-bottom: 10px;
+    }
+    .review-user, .forum-user { font-weight: bold; color: #fff; }
+    .review-rating { color: #ffc107; font-size: 0.9rem; margin-left: 10px; }
+    .review-text, .forum-text { color: #ccc; font-size: 0.95rem; margin-top: 5px; }
+    .forum-date { font-size: 0.75rem; color: #666; float: right; }
+    
+    .review-form, .forum-form {
+        margin-top: 15px;
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    textarea {
+        background: #18181c; border: 1px solid #444; color: #fff; padding: 10px; border-radius: 4px;
+        font-family: inherit; resize: vertical;
+    }
+    select {
+        background: #18181c; border: 1px solid #444; color: #fff; padding: 8px; border-radius: 4px; width: 100px;
+    }
+
+    @media (max-width: 768px) {
+      .detail-modal { flex-direction: column; width: 90vw; height: 90vh; overflow-y: auto; }
+      .detail-poster { width: 100%; height: 250px; }
+      .detail-content { width: 100%; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="post.html">Posts</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="other.html">More</a></li>
+      </ul>
+      <div class="profile-actions">
+        <!-- JS Injected -->
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      <h2>Browse Movies</h2>
+      <div class="movie-cards">
+        <!-- JS Injects Movies Here -->
+        <p style="text-align:center; width:100%; color:#555;">Loading movies...</p>
+      </div>
+    </div>
+  </main>
+
+  <!-- Movie Details Modal -->
+  <div class="modal-overlay" id="userMovieModal" onclick="if(event.target === this) closeUserMovieModal()">
+    <div class="detail-modal">
+      <img src="" alt="Poster" class="detail-poster" id="detailPoster">
+      <div class="detail-content">
+        <div class="detail-header">
+          <h1 class="detail-title" id="detailTitle">Movie Title</h1>
+          <div class="detail-meta">
+            <span id="detailYear">2023</span>
+            <span id="detailDuration">120 min</span>
+            <span class="meta-badge" id="detailGenre">Action</span>
+            <span style="color:#ffc107;">⭐ <span id="detailRating">8.5</span></span>
+          </div>
+        </div>
+        <p class="detail-synopsis" id="detailSynopsis">
+          Loading description...
+        </p>
+        
+        <!-- Watchlist Controls -->
+        <div class="watchlist-control" style="margin-top:20px; padding-top:20px; border-top:1px solid #444;">
+            <h4 style="margin:0 0 10px 0; color:#ddd;">Manage Watchlist</h4>
+            <div style="display:flex; gap:10px;">
+                <select id="watchlistStatusSelect" style="padding:10px; background:#1f2026; color:#fff; border:1px solid #444; border-radius:4px; flex:1;">
+                    <option value="to-watch">To Watch</option>
+                    <option value="watching">Watching</option>
+                    <option value="completed">Completed</option>
+                </select>
+                <button onclick="saveToWatchlist()" style="background:var(--accent); color:#fff; border:none; padding:10px 20px; border-radius:4px; cursor:pointer; font-weight:600;">Save</button>
+            </div>
+        </div>
+
+        <!-- Reviews Section -->
+        <h4 class="section-header">User Reviews</h4>
+        <div class="reviews-section">
+            <div id="reviewsList" style="max-height: 200px; overflow-y: auto; margin-bottom: 15px;">
+                <!-- JS fills this -->
+                <p style="color:#777;">No reviews yet.</p>
+            </div>
+            <form class="review-form" onsubmit="submitReview(event)">
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <label>Rate (1-10):</label>
+                    <select id="reviewRatingInput" required>
+                        <option value="10">10</option>
+                        <option value="9">9</option>
+                        <!-- ... other options ... -->
+                        <option value="8">8</option><option value="7">7</option><option value="6">6</option>
+                        <option value="5">5</option><option value="4">4</option><option value="3">3</option>
+                        <option value="2">2</option><option value="1">1</option>
+                    </select>
+                </div>
+                <textarea id="reviewTextInput" rows="2" placeholder="Write your review here..." required></textarea>
+                <button type="submit" style="background:#444; color:#fff; border:none; padding:8px; border-radius:4px; cursor:pointer;">Post Review</button>
+            </form>
+        </div>
+
+        <!-- NEW: Discussion Forum Section -->
+        <h4 class="section-header">Discussion Forum</h4>
+        <div class="forum-section">
+            <div id="forumPostsList" style="max-height: 250px; overflow-y: auto; margin-bottom: 15px;">
+                <!-- JS fills this -->
+                <p style="color:#777;">Start the discussion!</p>
+            </div>
+            <form class="forum-form" onsubmit="submitForumPost(event)">
+                <textarea id="forumTextInput" rows="2" placeholder="Share your thoughts..." required></textarea>
+                <button type="submit" style="background:var(--accent); color:#fff; border:none; padding:8px; border-radius:4px; cursor:pointer;">Post to Forum</button>
+            </form>
+        </div>
+
+        <button class="close-modal-btn" onclick="closeUserMovieModal()">Close Details</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    window.onload = function() {
+        checkAuthAndUI();
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Other - MOVstrem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #fa4a4a;
+    }
+    body {
+      background: #18171c;
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    /* NAVBAR (unified) */
+    nav {
+      background: #111017;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo {
+      font-size: 1.7rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+    .logo .red {
+      color: var(--accent);
+    }
+    nav ul {
+      list-style: none;
+      display: flex;
+      gap: 2rem;
+      margin: 0;
+      padding: 0;
+    }
+    nav ul li a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav ul li a:hover {
+      color: var(--accent);
+    }
+    .profile-actions button {
+      cursor: pointer;
+      border: none;
+      font-weight: 600;
+      padding: 8px 20px;
+      border-radius: 30px;
+      transition: 0.2s;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: #23222b;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      margin-bottom: 30px;
+    }
+    h2 { margin-top: 0; color: #fff; border-bottom: 2px solid var(--accent); padding-bottom: 10px; display: inline-block; }
+    
+    .section-title {
+      font-size: 1.1rem;
+      color: #ccc;
+      margin-bottom: 15px;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+    li {
+      margin-bottom: 10px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .status-badge {
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+        background: #333;
+        text-transform: uppercase;
+    }
+    .status-watching { color: #3498db; }
+    .status-completed { color: #2ecc71; }
+    .status-to-watch { color: #f1c40f; }
+    
+    .history-date { font-size: 0.85rem; color: #888; }
+
+    .notif-new { color: var(--accent); font-weight: bold; margin-right: 6px; }
+    .notif-msg { color: #ddd; }
+    .mark-read-btn {
+        background: transparent; border: 1px solid #666; color: #aaa;
+        padding: 5px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8rem;
+    }
+    .mark-read-btn:hover { border-color: #fff; color: #fff; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="post.html">Posts</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="other.html">More</a></li>
+      </ul>
+      <div class="profile-actions">
+        <!-- Injected -->
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      
+      <!-- Notifications Section -->
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h2>Notifications</h2>
+            <button class="mark-read-btn" onclick="markNotificationsRead()">Mark All Seen</button>
+        </div>
+        <ul id="notificationList">
+          <li style="color:#777;">Loading...</li>
+        </ul>
+      </div>
+      
+      <!-- Watchlist Section -->
+      <div class="card">
+        <h2>Your Watchlist</h2>
+        <div class="section-title">Current Status</div>
+        <ul id="userWatchlist">
+          <li style="color:#777;">Loading watchlist...</li>
+        </ul>
+      </div>
+
+      <!-- History Section -->
+      <div class="card">
+        <h2>History Log</h2>
+        <div class="section-title">Recent Activity</div>
+        <ul id="userHistoryList">
+          <li style="color:#777;">Loading history...</li>
+        </ul>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    window.onload = function() {
+        checkAuthAndUI(); 
+    };
+  </script>
+</body>
+</html>

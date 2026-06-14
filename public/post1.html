@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Posts - MOVstrem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-accent: #fa4a4a;
+      --primary-dark: #18171c;
+      --card-dark: #23222b;
+      --view-accent: #fa4a4a;
+      --delete-accent: #7c1c1c;
+    }
+    body {
+      background: var(--primary-dark);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background: #111017;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo { font-size: 1.7rem; font-weight: 700; letter-spacing: 2px; color: #fff; }
+    .logo .red { color: var(--main-accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+    nav ul li a:hover { color: var(--main-accent); }
+    .profile-actions { display: flex; align-items: center; }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .card {
+      background: var(--card-dark);
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    h2 { margin-top: 0; border-bottom: 2px solid var(--main-accent); padding-bottom: 10px; display: inline-block; }
+    
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      text-align: left;
+      padding: 15px;
+      border-bottom: 1px solid #333;
+    }
+    th { color: #b0b0b0; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 1px; }
+    td { font-size: 0.95rem; }
+    tr:last-child td { border-bottom: none; }
+    
+    button.view, button.delete {
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-right: 5px;
+      font-weight: 600;
+      color: #fff;
+    }
+    .view { background: var(--view-accent); }
+    .delete { background: var(--delete-accent); }
+
+    /* Comment Moderation Modal */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+    }
+    .modal {
+      background: #2b2d35;
+      width: 500px;
+      max-width: 90vw;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      border: 1px solid #444;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+    .modal h3 { margin-top: 0; color: #fff; border-bottom: 1px solid #444; padding-bottom: 15px; }
+    
+    .admin-comment-list { list-style: none; padding: 0; }
+    .admin-comment-item {
+        display: flex; justify-content: space-between; align-items: flex-start;
+        border-bottom: 1px solid #333; padding: 10px 0;
+    }
+    .comment-meta { font-weight: bold; color: var(--main-accent); display: block; margin-bottom: 4px; }
+    .comment-body { font-size: 0.9rem; color: #ddd; }
+    
+    .modal-close {
+      background: transparent; border: 1px solid #666; color: #fff;
+      padding: 8px 20px; border-radius: 4px; cursor: pointer; margin-top: 20px; float: right;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="admin.html">Dashboard</a></li>
+        <li><a href="users1.html">Users</a></li>
+        <li><a href="events1.html">Events</a></li>
+        <li><a href="movies1.html">Movies</a></li>
+        <li><a href="post1.html">Posts</a></li>
+        <li><a href="genres1.html">Genres</a></li>
+        <li><a href="restrictedwords1.html">Restricted Words</a></li>
+        <li><a href="auditlogs1.html">Audit Logs</a></li>
+      </ul>
+      <div class="profile-actions">
+        <!-- JS fills this -->
+      </div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <div class="card">
+        <h2>Manage Posts</h2>
+        <div class="section-title">Moderate user content</div>
+        <table>
+          <thead>
+            <tr>
+              <th>Author</th>
+              <th>Content Preview</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminPostsTableBody">
+             <!-- JS Populates this -->
+             <tr><td colspan="4" style="text-align:center;">Loading...</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- Comments Modal -->
+  <div class="modal-overlay" id="postCommentsModal">
+    <div class="modal">
+      <h3>Manage Comments</h3>
+      <ul class="admin-comment-list" id="adminCommentsList">
+        <!-- JS Populates this -->
+      </ul>
+      <button class="modal-close" onclick="document.getElementById('postCommentsModal').style.display='none'">Close</button>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    window.onload = function() {
+        checkAuthAndUI(); 
+        loadManagePosts(); // New function in main.js
+    };
+  </script>
+</body>
+</html>

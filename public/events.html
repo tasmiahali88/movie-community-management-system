@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Events - MOVstrem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root { var(--accent: #fa4a4a); }
+    body { background: #18171c; color: #fff; font-family: 'Montserrat', sans-serif; margin: 0; }
+    nav { background: #111017; display: flex; justify-content: space-between; align-items: center; padding: 0 2rem; height: 70px; }
+    .logo { font-size: 1.7rem; font-weight: 700; color: #fff; }
+    .logo .red { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; transition: 0.2s; }
+    nav ul li a:hover { color: var(--accent); }
+    .profile-actions { display: flex; align-items: center; }
+
+    .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+    .card { background: #23222b; padding: 30px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); margin-bottom: 30px; }
+    
+    .event-list { list-style: none; padding: 0; margin-top: 20px; }
+    .event-list li { margin-bottom: 12px; border-bottom: 1px solid #333; padding-bottom: 12px; }
+    .event-link { color: #fff; text-decoration: none; font-size: 1.05rem; cursor: pointer; display: flex; justify-content: space-between; }
+    .event-link:hover { color: var(--accent); }
+    
+    .login-btn { background: transparent; border: 1px solid #fff; color: #fff; padding: 8px 16px; border-radius: 4px; cursor: pointer; }
+    .host-btn { background: var(--accent); border: none; color: #fff; padding: 10px 20px; border-radius: 4px; cursor: pointer; font-weight: 600; float: right; }
+    .join-btn { background: #27ae60; border: none; color: #fff; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; margin-top:10px; }
+
+    /* Modal */
+    .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: none; justify-content: center; align-items: center; z-index: 2000; }
+    .modal { background: #2b2d35; width: 500px; padding: 30px; border-radius: 12px; border: 1px solid #444; }
+    .modal input, .modal select, .modal textarea { width: 100%; background: #1f2026; border: 1px solid #444; padding: 10px; color: #fff; margin-bottom: 15px; box-sizing: border-box; }
+    label { display: block; margin-bottom: 5px; color: #aaa; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="post.html">Posts</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="other.html">More</a></li>
+      </ul>
+      <div class="profile-actions"></div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <div class="card" id="eventsListCard">
+        <button class="host-btn" onclick="openHostEventModal()">+ Host Event</button>
+        <h2 style="margin-top:0;">Upcoming Events</h2>
+        <ul class="event-list" id="userEventsList">
+          <li style="text-align:center;">Loading events...</li>
+        </ul>
+      </div>
+
+      <div class="card" id="eventDetailsCard" style="display:none;">
+        <h2>Event Details</h2>
+        <div class="event-details" id="eventDetailsContent"></div>
+        <button class="login-btn" style="margin-top:18px;" onclick="document.getElementById('eventsListCard').style.display='block'; document.getElementById('eventDetailsCard').style.display='none';">Back</button>
+      </div>
+    </div>
+  </main>
+
+  <!-- Host Event Modal -->
+  <div class="modal-overlay" id="hostEventModal">
+    <div class="modal">
+      <h3 style="margin-top:0; color:#fff;">Host a Watch Party</h3>
+      <form onsubmit="handleHostEventSubmit(event)">
+        <label>Event Title</label>
+        <input type="text" name="title" required>
+        
+        <label>Select Movie</label>
+        <select id="hostMovieSelect" name="movie_id" required><option value="">Loading...</option></select>
+        
+        <label>Date & Time</label>
+        <input type="datetime-local" name="event_datetime" required>
+        
+        <label>Capacity</label>
+        <input type="number" name="capacity" value="20" min="1" max="100" required>
+
+        <label>Description</label>
+        <textarea name="description" rows="3"></textarea>
+        
+        <div style="text-align:right; margin-top:10px;">
+            <button type="button" onclick="document.getElementById('hostEventModal').style.display='none'" style="background:transparent; border:1px solid #aaa; color:#fff; padding:8px 16px; border-radius:4px; cursor:pointer;">Cancel</button>
+            <button type="submit" style="background:var(--accent); border:none; color:#fff; padding:8px 16px; border-radius:4px; cursor:pointer;">Host Event</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>window.onload = function() { checkAuthAndUI(); };</script>
+</body>
+</html>

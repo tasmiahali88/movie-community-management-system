@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Manage Movies - MOVstrem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-accent: #fa4a4a;
+      --primary-dark: #18171c;
+      --card-dark: #23222b;
+      --text-muted: #b0b0b0;
+    }
+    body {
+      background: var(--primary-dark);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background: #111017;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo { font-size: 1.7rem; font-weight: 700; letter-spacing: 2px; color: #fff; }
+    .logo .red { color: var(--main-accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+    nav ul li a:hover { color: var(--main-accent); }
+    .profile-actions { display: flex; align-items: center; }
+
+    .container {
+      max-width: 1100px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    
+    .toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 25px;
+      background: var(--card-dark);
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }
+    .toolbar h2 { margin: 0; font-size: 1.5rem; }
+    
+    .create-btn {
+      background: var(--main-accent);
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 6px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(250, 74, 74, 0.3);
+      transition: transform 0.2s;
+    }
+    .create-btn:hover { transform: translateY(-2px); }
+
+    .card {
+      background: var(--card-dark);
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+    th, td {
+      text-align: left;
+      padding: 16px;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    td { font-size: 0.95rem; }
+    tr:last-child td { border-bottom: none; }
+    tr:hover { background: rgba(255,255,255,0.02); }
+    
+    .action-btn {
+      background: transparent;
+      border: 1px solid #555;
+      color: #ccc;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      margin-right: 5px;
+      transition: 0.2s;
+    }
+    .action-btn:hover { border-color: #fff; color: #fff; }
+    .action-btn.edit { border-color: #3498db; color: #3498db; }
+    .action-btn.edit:hover { background: #3498db; color: #fff; }
+    .action-btn.delete:hover { border-color: var(--main-accent); color: var(--main-accent); }
+
+    /* Modal Styles */
+    .modal-overlay {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      backdrop-filter: blur(5px);
+    }
+    .modal {
+      background: #2b2d35;
+      width: 500px;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+      border: 1px solid #333;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal h3 { margin-top: 0; color: #fff; border-bottom: 1px solid #444; padding-bottom: 15px; margin-bottom: 20px; }
+    
+    .form-row { display: flex; gap: 15px; }
+    .form-group { margin-bottom: 18px; flex: 1; }
+    .form-group label { display: block; margin-bottom: 8px; font-size: 0.85rem; color: #ccc; font-weight: 600; }
+    .form-group input, .form-group textarea {
+      width: 100%;
+      padding: 12px;
+      background: #1f2026;
+      border: 1px solid #444;
+      border-radius: 6px;
+      color: #fff;
+      font-family: inherit;
+      box-sizing: border-box;
+      font-size: 0.95rem;
+    }
+    .form-group input:focus { border-color: var(--main-accent); outline: none; }
+    
+    /* Genre Checkbox Grid */
+    .genre-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+        background: #1f2026;
+        padding: 10px;
+        border: 1px solid #444;
+        border-radius: 6px;
+    }
+    .genre-checkbox {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.9rem;
+        cursor: pointer;
+    }
+    .genre-checkbox input { width: auto; margin: 0; cursor: pointer; }
+
+    .modal-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+      margin-top: 25px;
+      border-top: 1px solid #444;
+      padding-top: 20px;
+    }
+    .cancel-btn { background: transparent; border: none; color: #aaa; cursor: pointer; font-weight: 600; }
+    .submit-btn { background: var(--main-accent); color: white; border: none; padding: 10px 24px; border-radius: 4px; font-weight: 600; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="admin.html">Dashboard</a></li>
+        <li><a href="users1.html">Users</a></li>
+        <li><a href="events1.html">Events</a></li>
+        <li><a href="movies1.html">Movies</a></li>
+        <li><a href="post1.html">Posts</a></li>
+        <li><a href="genres1.html">Genres</a></li>
+        <li><a href="restrictedwords1.html">Restricted</a></li>
+        <li><a href="auditlogs1.html">Audit</a></li>
+      </ul>
+      <div class="profile-actions">
+        <!-- Injected by main.js -->
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      
+      <!-- Toolbar -->
+      <div class="toolbar">
+        <div>
+          <h2>Manage Movies</h2>
+          <span style="color:var(--text-muted); font-size:0.85rem;">Add and edit database entries</span>
+        </div>
+        <button class="create-btn" onclick="openMovieModal()">+ Add Movie</button>
+      </div>
+
+      <!-- Movies Table -->
+      <div class="card">
+        <table>
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Release Year</th>
+              <th>Genres</th> <!-- Plural now -->
+              <th>Duration (min)</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="adminMoviesTableBody">
+            <!-- Populated by JS -->
+            <tr><td colspan="5" style="text-align:center; padding: 30px;">Loading movies...</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Create/Edit Movie Modal -->
+  <div class="modal-overlay" id="movieModal">
+    <div class="modal">
+      <h3 id="modalTitle">Add New Movie</h3>
+      <form id="movieForm" onsubmit="handleMovieSubmit(event)">
+        
+        <input type="hidden" name="movie_id" id="movieIdInput">
+
+        <div class="form-group">
+          <label>Movie Title</label>
+          <input type="text" name="title" id="movieTitleInput" placeholder="e.g., Inception" required>
+        </div>
+
+        <div class="form-group">
+          <label>Poster Image URL</label>
+          <input type="text" name="poster_image" id="moviePosterInput" placeholder="https://example.com/poster.jpg">
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label>Release Year</label>
+                <input type="number" name="release_year" id="movieYearInput" placeholder="2023" required>
+            </div>
+            <div class="form-group">
+                <label>Duration (mins)</label>
+                <input type="number" name="duration_minutes" id="movieDurationInput" placeholder="120">
+            </div>
+        </div>
+
+        <!-- NEW: Checkbox Grid for Multi-Genre -->
+        <div class="form-group">
+            <label>Select Genres</label>
+            <div id="genreCheckboxContainer" class="genre-grid">
+                <!-- Checkboxes injected by JS -->
+                <span style="color:#aaa; font-size:0.9rem;">Loading genres...</span>
+            </div>
+        </div>
+
+        <div class="form-group">
+          <label>Synopsis</label>
+          <textarea name="synopsis" id="movieSynopsisInput" rows="3" placeholder="Plot summary..."></textarea>
+        </div>
+
+        <div class="modal-actions">
+          <button type="button" class="cancel-btn" onclick="closeMovieModal()">Cancel</button>
+          <button type="submit" class="submit-btn" id="modalSubmitBtn">Save Movie</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="js/main.js"></script>
+  <script>
+    window.onload = function() {
+        checkAuthAndUI();
+        loadAdminMovies(); // Trigger loading of movies
+    };
+  </script>
+</body>
+</html>

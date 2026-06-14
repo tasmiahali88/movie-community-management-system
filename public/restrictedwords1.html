@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Restricted Words - MOVstrem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --main-accent: #fa4a4a;
+      --primary-dark: #18171c;
+      --card-dark: #23222b;
+    }
+    body {
+      background: var(--primary-dark);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    nav {
+      background: #111017;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo { font-size: 1.7rem; font-weight: 700; letter-spacing: 2px; color: #fff; }
+    .logo .red { color: var(--main-accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; font-size: 0.9rem; transition: color 0.2s; }
+    nav ul li a:hover { color: var(--main-accent); }
+    .profile-actions { display: flex; align-items: center; }
+
+    .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
+    .card { background: var(--card-dark); padding: 30px; border-radius: 15px; }
+    h2 { border-bottom: 2px solid var(--main-accent); padding-bottom: 10px; display: inline-block; }
+    
+    .restrict-list { list-style: none; padding: 0; margin-top: 20px; }
+    .restrict-list li {
+      background: #18181c; margin-bottom: 10px; padding: 15px; border-radius: 8px;
+      color: #ffc553; border-left: 4px solid #fa4a4a;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .delete-btn {
+        background: #7c1c1c; border: none; color: #fff; padding: 6px 12px; border-radius: 4px; cursor: pointer;
+    }
+    
+    .add-form { margin-bottom: 20px; display: flex; gap: 10px; }
+    .add-input { flex: 1; padding: 10px; background: #18181c; border: 1px solid #444; color: #fff; border-radius: 4px; }
+    .add-btn { background: var(--main-accent); border: none; color: #fff; padding: 0 20px; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  </style>
+</head>
+<body>
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="admin.html">Dashboard</a></li>
+        <li><a href="users1.html">Users</a></li>
+        <li><a href="events1.html">Events</a></li>
+        <li><a href="movies1.html">Movies</a></li>
+        <li><a href="post1.html">Posts</a></li>
+        <li><a href="genres1.html">Genres</a></li>
+        <li><a href="restrictedwords1.html">Restricted</a></li>
+        <li><a href="auditlogs1.html">Audit</a></li>
+      </ul>
+      <div class="profile-actions"></div>
+    </nav>
+  </header>
+  <main>
+    <div class="container">
+      <div class="card">
+        <h2>Restricted Words</h2>
+        <div class="section-title" style="margin-bottom:15px; color:#aaa;">Content containing these words will be automatically flagged.</div>
+        
+        <form class="add-form" onsubmit="handleAddWord(event)">
+            <input type="text" id="newWordInput" class="add-input" placeholder="Enter new word..." required>
+            <button type="submit" class="add-btn">Add</button>
+        </form>
+
+        <ul class="restrict-list" id="restrictedWordsList">
+          <li style="text-align:center; color:#777;">Loading...</li>
+        </ul>
+      </div>
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    window.onload = function() {
+        checkAuthAndUI();
+        loadRestrictedWordsPage(); 
+    };
+  </script>
+</body>
+</html>

@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Posts - MOVstrem</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:700,400&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --accent: #fa4a4a;
+      --bg-dark: #18171c;
+      --card-bg: #23222b;
+    }
+    body {
+      background: var(--bg-dark);
+      font-family: 'Montserrat', sans-serif;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav {
+      background: #111017;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 2rem;
+      height: 70px;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+    }
+    .logo { font-size: 1.7rem; font-weight: 700; letter-spacing: 2px; color: #fff; }
+    .logo .red { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2rem; margin: 0; padding: 0; }
+    nav ul li a { color: #fff; text-decoration: none; font-weight: 500; transition: color 0.2s; }
+    nav ul li a:hover { color: var(--accent); }
+    .profile-actions button { cursor: pointer; border: none; font-weight: 600; padding: 8px 20px; border-radius: 30px; }
+
+    .container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    h2 { border-left: 4px solid var(--accent); padding-left: 15px; margin-bottom: 30px; }
+
+    /* Create Post Card */
+    .create-card {
+      background: var(--card-bg);
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+      margin-bottom: 40px;
+    }
+    .create-card h3 { margin-top: 0; margin-bottom: 15px; }
+    
+    .form-group { margin-bottom: 15px; }
+    .form-group select, .form-group textarea {
+      width: 100%;
+      background: #18171c;
+      border: 1px solid #444;
+      padding: 12px;
+      border-radius: 6px;
+      color: #fff;
+      font-family: inherit;
+      box-sizing: border-box;
+    }
+    .post-btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 10px 25px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      float: right;
+    }
+
+    /* Feed Styles */
+    .feed-container { display: flex; flex-direction: column; gap: 20px; }
+    .post-card {
+      background: var(--card-bg);
+      padding: 20px;
+      border-radius: 12px;
+      border: 1px solid #333;
+    }
+    .post-header {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      border-bottom: 1px solid #333;
+      padding-bottom: 10px;
+    }
+    .post-author { font-weight: bold; font-size: 1.1rem; }
+    .post-movie { color: var(--accent); font-size: 0.9rem; font-weight: 600; }
+    .post-content { font-size: 1rem; line-height: 1.5; color: #ddd; margin-bottom: 15px; }
+    
+    .post-actions {
+      display: flex; gap: 15px; border-top: 1px solid #333; padding-top: 10px;
+    }
+    .action-btn {
+      background: transparent; border: none; color: #aaa; cursor: pointer; display: flex; align-items: center; gap: 6px; font-size: 0.9rem;
+    }
+    .action-btn:hover { color: #fff; }
+    .liked { color: var(--accent) !important; }
+
+    /* Comments Section */
+    .comments-section {
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid #333;
+      display: none; /* Hidden by default */
+    }
+    .comment-list { list-style: none; padding: 0; margin-bottom: 15px; }
+    .comment-item {
+      background: #1d1e24;
+      padding: 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 0.9rem;
+    }
+    .comment-author { color: var(--accent); font-weight: 600; margin-right: 5px; }
+    
+    .comment-form { display: flex; gap: 10px; }
+    .comment-input { flex: 1; padding: 8px; border-radius: 4px; border: 1px solid #444; background: #151518; color: #fff; }
+    .comment-submit { background: #444; color: #fff; border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <nav>
+      <div class="logo">MOV<span class="red">strem</span></div>
+      <ul>
+        <li><a href="dashboard.html">Dashboard</a></li>
+        <li><a href="profile.html">Profile</a></li>
+        <li><a href="movies.html">Movies</a></li>
+        <li><a href="friends.html">Friends</a></li>
+        <li><a href="post.html">Posts</a></li>
+        <li><a href="events.html">Events</a></li>
+        <li><a href="other.html">More</a></li>
+      </ul>
+      <div class="profile-actions">
+        <!-- Injected -->
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="container">
+      
+      <!-- Create Post -->
+      <div class="create-card">
+        <h3>Create Post</h3>
+        <form onsubmit="handleCreatePost(event)">
+          <div class="form-group">
+            <select id="postMovieSelect" required>
+              <option value="">Select a Movie to discuss...</option>
+              <!-- JS fills this -->
+            </select>
+          </div>
+          <div class="form-group">
+            <textarea id="postContent" rows="3" placeholder="What's on your mind?" required></textarea>
+          </div>
+          <button type="submit" class="post-btn">Post</button>
+          <div style="clear:both;"></div>
+        </form>
+      </div>
+
+      <!-- Feed -->
+      <h2>Community Feed</h2>
+      <div id="communityFeed" class="feed-container">
+        <div style="text-align:center; padding:20px; color:#777;">Loading posts...</div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="js/main.js"></script>
+  <script>
+    window.onload = function() {
+        checkAuthAndUI(); // from main.js
+        // Load data specific to this page
+        populateMovieDropdown(); 
+        loadCommunityPosts();
+    };
+  </script>
+</body>
+</html>
